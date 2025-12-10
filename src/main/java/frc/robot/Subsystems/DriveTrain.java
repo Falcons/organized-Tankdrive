@@ -23,10 +23,10 @@ public class DriveTrain extends SubsystemBase {
     private final SparkMax frontRight = new SparkMax(DriveConstants.frontRightCANID, MotorType.kBrushless);
     private final SparkMax backLeft = new SparkMax(DriveConstants.backLeftCANID, MotorType.kBrushless);
     private final SparkMax backRight = new SparkMax(DriveConstants.backRightCANID, MotorType.kBrushless);
-
     // create encoders
     private final RelativeEncoder frontLeftEncoder = frontLeft.getEncoder();
     private final RelativeEncoder frontRightEncoder = frontRight.getEncoder();
+
 
     // CONFIGS:
     // create motor configs
@@ -36,7 +36,7 @@ public class DriveTrain extends SubsystemBase {
     private final SparkMaxConfig backRightConfig = new SparkMaxConfig();
 
     // OTHER STUFF
-    private final Pigeon2 gyro = new Pigeon2(0);
+    private final Pigeon2 gyro = new Pigeon2(DriveConstants.pigeonCANID);
     // track width is distance between left and right wheels
     private final DifferentialDriveOdometry odometry;
     private DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
@@ -52,9 +52,9 @@ public class DriveTrain extends SubsystemBase {
         frontLeftConfig.inverted(true);
         // encoder configs
         frontLeftConfig.encoder.
-            positionConversionFactor(DriveConstants.wheelDiameterInch * Math.PI / DriveConstants.ticksPerRotation);
+            positionConversionFactor(DriveConstants.wheelDiameterMeters * Math.PI / DriveConstants.ticksPerRotation);
         frontRightConfig.encoder.
-            positionConversionFactor(DriveConstants.wheelDiameterInch * Math.PI / DriveConstants.ticksPerRotation);
+            positionConversionFactor(DriveConstants.wheelDiameterMeters * Math.PI / DriveConstants.ticksPerRotation);
       
         // flash motors
         backLeft.configure(backLeftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

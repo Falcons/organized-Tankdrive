@@ -22,20 +22,20 @@ public class DriveTrainSim extends SubsystemBase {
     // create motors
     private final SparkMax frontLeft = new SparkMax(DriveConstants.frontLeftCANID, MotorType.kBrushless);
     private final SparkMax frontRight = new SparkMax(DriveConstants.frontRightCANID, MotorType.kBrushless);
-    private final SparkMax backLeft = new SparkMax(DriveConstants.backLeftCANID, MotorType.kBrushless);
-    private final SparkMax backRight = new SparkMax(DriveConstants.backRightCANID, MotorType.kBrushless);
+    // private final SparkMax backLeft = new SparkMax(DriveConstants.backLeftCANID, MotorType.kBrushless);
+    // private final SparkMax backRight = new SparkMax(DriveConstants.backRightCANID, MotorType.kBrushless);
 
     private final SparkMaxSim frontLeftSim = new SparkMaxSim(frontLeft, DCMotor.getNEO(1));
     private final SparkMaxSim frontRightSim = new SparkMaxSim(frontRight, DCMotor.getNEO(1));
-    private final SparkMaxSim backLeftSim = new SparkMaxSim(backLeft, DCMotor.getNEO(1));
-    private final SparkMaxSim backRightSim = new SparkMaxSim(backRight, DCMotor.getNEO(1));
+    // private final SparkMaxSim backLeftSim = new SparkMaxSim(backLeft, DCMotor.getNEO(1));
+    // private final SparkMaxSim backRightSim = new SparkMaxSim(backRight, DCMotor.getNEO(1));
 
     // create encoders
     private final SparkRelativeEncoderSim frontLeftEncoderSim = frontLeftSim.getRelativeEncoderSim();
     private final SparkRelativeEncoderSim frontRightEncoderSim = frontRightSim.getRelativeEncoderSim();
 
     // OTHER STUFF
-    private final Pigeon2 gyro = new Pigeon2(0);
+    private final Pigeon2 gyro = new Pigeon2(DriveConstants.pigeonCANID);
     // track width is distance between left and right wheels
     private final DifferentialDriveOdometry odometry;
 
@@ -81,15 +81,14 @@ public class DriveTrainSim extends SubsystemBase {
 
     public void drive(double speed, double turn) {
         double deltaTime = 0.02; // each loop is 0.02 seconds
-        // turn *= deltaTime;
         
         // Get left/right wheel speeds from arcade IK
         WheelSpeeds outputs = DifferentialDrive.arcadeDriveIK(
             speed, turn, false);
     
         // Convert wheel speeds to distances use delta time so it isnt too fast
-        double leftDistance = outputs.left * deltaTime;
-        double rightDistance = outputs.right * deltaTime;
+        double leftDistance = outputs.left * deltaTime * DriveConstants.maxSpeedMPS;
+        double rightDistance = outputs.right * deltaTime * DriveConstants.maxSpeedMPS;
     
         // Update encoder positions
         frontLeftEncoderSim.setPosition(frontLeftEncoderSim.getPosition() + leftDistance);
