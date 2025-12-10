@@ -9,16 +9,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Commands.DriveSim;
-import frc.robot.Subsystems.DriveTrainSim;
+import frc.robot.Commands.Drive;
+import frc.robot.Subsystems.DriveTrain;
 
 public class RobotContainer {
 
   // Xbox contorller
    private final XboxController controller = new XboxController(0);
   // create subsystems
-  // private final DriveTrain driveTrain = new DriveTrain();
-  private final DriveTrainSim driveTrainSim = new DriveTrainSim();
+  private final DriveTrain driveTrain = new DriveTrain();
 
   public RobotContainer() {
     configureBindings();
@@ -27,9 +26,9 @@ public class RobotContainer {
   private void configureBindings() {
 
     // make a default command
-      driveTrainSim.setDefaultCommand(
-        new DriveSim(
-          driveTrainSim,
+      driveTrain.setDefaultCommand(
+        new Drive(
+          driveTrain,
           () -> -MathUtil.applyDeadband(controller.getLeftY(), ControllerConstants.kDriveDeadband),
           () -> -MathUtil.applyDeadband(controller.getRightX(), ControllerConstants.kDriveDeadband)
       ));
